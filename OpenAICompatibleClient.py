@@ -47,4 +47,4 @@ class OpenAICompatibleClient:
             return "".join(collected_content)
         except Exception as e:
             print(f"调用LLM API时发生错误: {e}")
-            return "错误: 调用大语言模型时出错。"
+            return None
