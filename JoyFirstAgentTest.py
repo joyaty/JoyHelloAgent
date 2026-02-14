@@ -35,7 +35,7 @@ def Get_Weather(city:str) -> str:
 """
 def Get_Attraction(city: str, weather: str) -> str:
     # 从环境变量获取API密钥
-    api_key = os.environ.get("TAVILY_API_KEY")
+    api_key = os.getenv("TAVILY_API_KEY")
     # 初始化Tavily客户端
     tavily = TavilyClient(api_key=api_key)
     # 3. 构造一个精确的查询
@@ -93,24 +93,19 @@ available_tools = {
     基于Thought-Action-Observation范式设计的智能体循环
 """
 def TravelAgentLoop(city: str):
-    # 1. 配置LLM客户端
-    API_KEY = os.environ.get("OPENAI_API_KEY")
-    BASE_URL = os.environ.get("OPENAI_BASE_URL")
-    MODEL_ID = os.environ.get("MODEL_NAME")
-
-    # 2. 初始化
-    llm = OpenAICompatibleClient(model=MODEL_ID, api_key=API_KEY, base_url=BASE_URL)
+    # 1. 初始化
+    llm = OpenAICompatibleClient()
     user_prompt = f"你好，请帮我查询一下今天{city}的天气，然后根据天气推荐一下合适的旅游景点。"
     prompt_histories = [f"用户请求:{user_prompt}"]
     print(f"用户输入:{user_prompt}\n" + "="*40)
 
-    # 3. 运行主循环
+    # 2. 运行主循环
     for i in range(5): # 设置最大循环次数
         print(f"---- 循环 {i+1} ---- \n")
-        # 3.1 构建prompt
+        # 2.1 构建prompt
         full_prompt = "\n".join(prompt_histories)
-        # 3.2 调用LLM进行思考
-        llm_output = llm.generate(full_prompt, system_prompt=AGENT_SYSTEM_PROMPT)
+        # 2.2 调用LLM进行思考
+        llm_output = llm.think(full_prompt, system_prompt=AGENT_SYSTEM_PROMPT)
         match = re.search(r'(Thought:.*?Action:.*?)(?=\n\s*(?:Thought:|Action:|Observation:)|\Z)', llm_output, re.DOTALL)
         if match:
             truncated = match.group(1).strip()
@@ -119,7 +114,7 @@ def TravelAgentLoop(city: str):
                 print("已截断多余的 Thought-Action 对")
         print(f"模型输出:\n{llm_output}\n")
         prompt_histories.append(llm_output)
-        # 3.3 解析并且执行行动
+        # 2.3 解析并且执行行动
         action_match = re.search(r"Action: (.*)", llm_output, re.DOTALL)
         if not action_match:
             observation = "错误：未能解析到Action字段。请确保你的回复严格遵循 'Thought: ... Action: ...' 的格式"
@@ -146,7 +141,7 @@ def TravelAgentLoop(city: str):
         else:
             observation = f"错误:未定义的工具 '{tool_name}'"
 
-        # 3.4. 记录观察结果
+        # 2.4. 记录观察结果
         observation_str = f"Observation: {observation}"
         print(f"{observation_str}\n" + "="*40)
         prompt_histories.append(observation_str)

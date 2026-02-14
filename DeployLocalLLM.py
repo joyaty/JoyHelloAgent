@@ -19,7 +19,7 @@ message = [
     {"role": "system", "content": "你是我的人工智能助手，协助我解答问题。"},
     {"role": "user", "content": "你好，请介绍一下你自己。"}
 ]
-## 使用分词器的模板格式化输入
+## 使用分词器的模板格式化输入  
 text = tokenizer.apply_chat_template(message, tokenize=False, add_generation_prompt=True)
 ## 编码输入文本并打印
 model_inputs = tokenizer([text], return_tensors="pt").to(device)
