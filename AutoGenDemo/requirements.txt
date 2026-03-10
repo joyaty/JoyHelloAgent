@@ -1,4 +1,5 @@
 ## AutoGen框架包，以及Demo相关的依赖包
+## pip install -r ./AutoGenDemo/requirements.txt
 autogen-agentchat
 autogen-ext[openai,azure]
 openai>=1.0.0

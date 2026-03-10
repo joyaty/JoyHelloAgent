@@ -1,0 +1,5 @@
+## AgentScope框架包
+## pip install -r ./AgentScope/requirements.txt
+agentscope
+dashscope
+pydantic 
