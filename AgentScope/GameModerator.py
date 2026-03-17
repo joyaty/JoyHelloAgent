@@ -47,6 +47,6 @@ class GameModerator(AgentBase):
     
     async def GameOverAnnouncement(self, winner: str) -> Msg:
         """游戏结束公告"""
-        content = f"🎉 游戏结束！{winner}胜利"
+        content = f"🎉 游戏结束！{winner}"
         return await self.Announce(content)
         

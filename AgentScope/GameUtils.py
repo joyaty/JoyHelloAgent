@@ -2,12 +2,17 @@
 from typing import List, Dict
 from collections import Counter
 
-def format_player_list(players: List[str]):
+from agentscope.agent import ReActAgent
+
+def  format_player_list(players: List[ReActAgent], show_role: bool = False):
     """格式化玩家列表"""
-    if players == None or players.count() <= 0:
+    if not players or len(players) <= 0:
         return "无人"
+    
+    if show_role:
+        return "、".join([f"{p.name}({getattr(p, 'role', '未知')})" for p in players])
     else:
-        return "、".join(players)
+        return "、".join([p.name for p in players])
     
 
 def majority_vote(votes: Dict[str, str]) -> tuple[str, int]:
