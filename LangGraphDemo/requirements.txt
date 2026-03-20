@@ -1,0 +1,6 @@
+# LangGraph相关的框架包
+# pip install -r ./LangGraphDemo/requirements.txt
+langgraph
+langchain_openai
+python-dotenv
+tavily-python
